@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Anagram Maker";
+}
+
+<h2>Anagram Maker</h2>
+
+@using (Html.BeginForm())
+{
+    <div>
+        <label for="initialWord">Enter your word(s):</label>
+        <input type="text" id="initialWord" name="initialWord"/>
+        <input type="button" id="btnSubmit" name="btnSubmit" value="Submit" />
+    </div>
+    <ul id="anagrams"></ul>
+}
+<script src="~/Scripts/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("form").submit(function(e) {
+            $("#btnSubmit").click();
+            e.preventDefault();
+        });
+        var url = '@Url.Action("GetAnagrams")';
+        $("#btnSubmit").click(function () {
+            var ul = $("#anagrams");
+            ul.empty();
+            var req = url + "/?word=" + $("#initialWord").val();
+            $.getJSON(req, null, function (d) {
+                $.each(d.items, function (i, a) {
+                    ul.append("<li>" + a + "</li>");
+                });
+            });
+        });
+    });
+</script>
